@@ -1,20 +1,13 @@
 import { randomUUID } from "node:crypto";
 import type { Conversation, Message, MessengerData, User } from "../models";
+import { MessengerError } from "./MessengerError";
 import { JsonRepository } from "../storage/JsonRepository";
+
+export { MessengerError } from "./MessengerError";
 
 const MAX_USERNAME_LENGTH = 30;
 const MAX_TITLE_LENGTH = 80;
 const MAX_MESSAGE_LENGTH = 4000;
-
-export class MessengerError extends Error {
-  constructor(
-    message: string,
-    readonly statusCode: 400 | 404 = 400,
-  ) {
-    super(message);
-    this.name = "MessengerError";
-  }
-}
 
 export class MessengerService {
   private constructor(
@@ -54,7 +47,7 @@ export class MessengerService {
       throw new MessengerError(`Ім’я не може бути довшим за ${MAX_USERNAME_LENGTH} символів.`);
     }
     if (this.findUserByUsername(normalized)) {
-      throw new MessengerError("Це ім’я вже зайняте.");
+      throw new MessengerError("Це ім’я вже зайняте.", 409);
     }
 
     const user: User = {

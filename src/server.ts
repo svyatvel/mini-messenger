@@ -1,7 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { extname, join } from "node:path";
-import { MessengerError, MessengerService } from "./services/MessengerService";
+import { MessengerError } from "./services/MessengerError";
+import { MessengerService } from "./services/MessengerService";
 
 const MAX_REQUEST_BYTES = 16 * 1024;
 const STATIC_FILES = new Map([
