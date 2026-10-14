@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: mini-messenger-demo
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/users
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATA_FILE_PATH
+        value: /tmp/study-hall/messages.json

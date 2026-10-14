@@ -5,7 +5,8 @@ import { createMessengerServer } from "./server";
 
 async function main(): Promise<void> {
   const repository = new JsonRepository(
-    resolve(process.cwd(), "data", "messages.json"),
+    process.env.DATA_FILE_PATH ??
+      resolve(process.cwd(), "data", "messages.json"),
   );
   const messenger = await MessengerService.open(repository);
   const publicDirectory = resolve(__dirname, "..", "public");
@@ -15,8 +16,9 @@ async function main(): Promise<void> {
   }
 
   const server = createMessengerServer(messenger, publicDirectory);
-  server.listen(port, "127.0.0.1", () => {
-    console.log(`Study Hall Messenger is running at http://localhost:${port}`);
+  const host = process.env.HOST ?? "127.0.0.1";
+  server.listen(port, host, () => {
+    console.log(`Study Hall Messenger is running at http://${host}:${port}`);
   });
 
   for (const signal of ["SIGINT", "SIGTERM"] as const) {
